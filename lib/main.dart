@@ -22,3 +22,14 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+/*
+ sqflite
+1. create database
+2. create tables
+3. open database
+4. insert to database
+5. get from database
+6. update in database
+7. delete from database
+ */
