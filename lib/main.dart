@@ -1,3 +1,4 @@
+import 'package:bmi/bloc_examble/bloc_examble.dart';
 import 'package:flutter/material.dart';
 import 'layout/home_layout.dart';
 
@@ -18,7 +19,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:HomeLayout() ,
+      home:CounterScreen(),
+      //HomeLayout() ,
     );
   }
 }
