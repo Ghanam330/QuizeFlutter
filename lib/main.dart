@@ -1,9 +1,14 @@
+import 'package:bloc/bloc.dart';
 import 'package:bmi/bloc_examble/bloc_examble.dart';
 import 'package:flutter/material.dart';
+import 'bloc_examble/shard/blocobserver.dart';
 import 'layout/home_layout.dart';
 
 
 void main() {
+  Bloc.observer = MyBlocObserver();
+  // Use blocs...
+
   runApp(MyApp());
 }
 
@@ -19,8 +24,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:CounterScreen(),
-      //HomeLayout() ,
+      home:HomeLayout() ,
+      //CounterScreen(),
+
     );
   }
 }
