@@ -1,3 +1,4 @@
+import 'package:bmi/cubit_bloc/cubit_todo.dart';
 import 'package:flutter/material.dart';
 
 Widget defaultButton({
@@ -55,34 +56,60 @@ Widget defaultFormField({
       ),
     );
 
-Widget buildTaskItem(Map model) => Padding(
-  padding: const EdgeInsets.all(20.0),
-  child: Row(
-    children: [
-      CircleAvatar(
-        radius: 40.0,
-        child: Text('${model['time']}'),
-      ),
-      SizedBox(width: 20.0,),
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+Widget buildTaskItem(Map model ,BuildContext context) => Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
         children: [
-          Text(
-            '${model['title']}',
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
+          CircleAvatar(
+            radius: 40.0,
+            child: Text('${model['time']}'),
+          ),
+          SizedBox(
+            width: 20.0,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${model['title']}',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '${model['data']}',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
             ),
           ),
-          Text(
-            '${model['data']}',
-            style: TextStyle(
-              color: Colors.grey,
+          SizedBox(
+            width: 20.0,
+          ),
+          IconButton(
+            onPressed: () {
+              AppCubit.get(context).updateDate(
+                  states: 'done'
+                  , id:model['id']
+              );
+            },
+            icon: Icon(
+              Icons.check_box,
+              color: Colors.green,
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.archive,
+              color: Colors.black45,
             ),
           ),
         ],
       ),
-    ],
-  ),
-);
+    );
