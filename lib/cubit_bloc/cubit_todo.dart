@@ -16,7 +16,9 @@ class AppCubit extends Cubit<AppStates> {
   IconData fabIcon = Icons.edit;
   int currentIndex = 0;
   Database database;
-  List<Map> tasks = [];
+  List<Map> newTasks = [];
+  List<Map> doneTasks = [];
+  List<Map> archivedTasks = [];
 
   List<Widget> screens = [
     NewTasksScreen(),
@@ -41,10 +43,7 @@ class AppCubit extends Cubit<AppStates> {
         print('Error when Creating Tabel ${onError.toString()}');
       });
     }, onOpen: (database) {
-      getDateFromDatabase(database).then((value) {
-        tasks = value;
-        emit(AppGetDatabaseState());
-      });
+      getDateFromDatabase(database);
     }).then((value) {
       database = value;
       emit(AppCreateDatabaseState());
@@ -65,10 +64,7 @@ class AppCubit extends Cubit<AppStates> {
 
         emit(AppInsertDatabaseState());
 
-        getDateFromDatabase(database).then((value) {
-          tasks = value;
-          emit(AppGetDatabaseState());
-        });
+        getDateFromDatabase(database);
       }).then((value) {
         database = value;
         emit(AppCreateDatabaseState());
@@ -79,19 +75,35 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  Future getDateFromDatabase(database) async {
+  void getDateFromDatabase(database) {
+
+    newTasks=[];
+    doneTasks=[];
+    archivedTasks=[];
+
     emit(AppGetDatabaseState());
-    return await database.rawQuery('SELECT * FROM tasks');
+    database.rawQuery('SELECT * FROM tasks').then((value) {
+      value.forEach((element) {
+        if (element['states'] == 'new')
+          newTasks.add(element);
+        else if (element['states'] == 'done') doneTasks.add(element);
+        else archivedTasks.add(element);
+      });
+      emit(AppGetDatabaseState());
+    });
   }
 
-  void updateDate({
+  void updateDate(
+      {
     @required String states,
     @required int id,
-  }) async {
+  }
+  ) async {
     database.rawUpdate(
       'UPDATE tasks SET status = ? WHERE id = ?',
       ['$states', id],
     ).then((value) {
+      getDateFromDatabase(database);
       emit(AppUpdateDatabaseState());
     });
   }
@@ -104,5 +116,19 @@ class AppCubit extends Cubit<AppStates> {
     fabIcon = icon;
 
     emit(AppChangeBottomSheetState());
+  }
+
+  void deleteDate(
+      {
+        @required int id,
+      }
+      ) async {
+    database.rawDelete(
+      'DELETE FROM tasks WHERE id = ?',
+      [id],
+    ).then((value) {
+      getDateFromDatabase(database);
+      emit(AppDeleteDatabaseState());
+    });
   }
 }
