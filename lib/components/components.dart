@@ -125,5 +125,4 @@ Widget buildTaskItem(Map model ,BuildContext context) =>
           ],
         ),
       ),
-
     );
